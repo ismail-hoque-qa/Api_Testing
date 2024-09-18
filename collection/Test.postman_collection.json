@@ -1,0 +1,268 @@
+{
+	"info": {
+		"_postman_id": "aaba7abd-6a7c-477f-b439-91278561c0db",
+		"name": "Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37968667"
+	},
+	"item": [
+		{
+			"name": "Get Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/studentsDetails",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var firstName = pm.variables.replaceIn('{{$randomFirstName}}')\r",
+							"pm.environment.set(\"firstName\",firstName)\r",
+							"\r",
+							"var middleName = pm.variables.replaceIn('{{$randomFirstName}}')\r",
+							"pm.environment.set(\"middleName\",middleName)\r",
+							"\r",
+							"var lastName = pm.variables.replaceIn('{{$randomLastName}}')\r",
+							"pm.environment.set(\"lastName\",lastName)\r",
+							"\r",
+							"var moment = require (\"moment\")\r",
+							"const today = moment()\r",
+							"pm.environment.set(\"date\",today.format(\"YYYY-MM-DD\"))\r",
+							"console.log(today)"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"first_name\": \"{{firstName}}\", \r\n\"middle_name\": \"{{middleName}}\", \r\n\"last_name\": \"{{lastName}}\", \r\n\"date_of_birth\": \"{{date}}\" \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/studentsDetails",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.environment.set(\"id\",data.data.id)\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"id Validation\",function(){\r",
+							"    pm.expect(pm.environment.get(\"id\")).to.equal(data.data.id)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"FirstName Validation\",function(){\r",
+							"    pm.expect(pm.environment.get(\"firstName\")).to.equal(data.data.first_name)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"MiddleName Validation\",function(){\r",
+							"    pm.expect(pm.environment.get(\"middleName\")).to.equal(data.data.middle_name)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"LastName Validation\",function(){\r",
+							"    pm.expect(pm.environment.get(\"lastName\")).to.equal(data.data.last_name)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Date of Birth Validation\",function(){\r",
+							"    pm.expect(pm.environment.get(\"date\")).to.equal(data.data.date_of_birth)\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/studentsDetails/{{id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Technical Skills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"id\": 1, \r\n\"language\": [ \r\n\"sample string 1\", \r\n\"sample string 2\" \r\n], \r\n\"yearexp\": \"sample string 2\", \r\n\"lastused\": \"sample string 3\", \r\n\"st_id\": id \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/technicalskills",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"technicalskills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Student Address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"Permanent_Address\": { \r\n\"House_Number\": \"sample string 1\",\r\n\"City\": \"sample string 2\",\r\n \"State\": \"sample string 3\", \r\n\"Country\": \"sample string 4\",\r\n\"PhoneNumber\": [ \r\n{ \r\n\"Std_Code\": \"sample string 1\",\r\n\"Home\": \"sample string 2\",\r\n \"Mobile\": \"sample string 3\" \r\n},\r\n{ \r\n\"Std_Code\": \"sample string 1\",\r\n\"Home\": \"sample string 2\", \r\n\"Mobile\": \"sample string 3\" \r\n} \r\n] \r\n},\r\n\"stId\": id \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/addresses",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"addresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FINAL STUDENT DETAILS",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
