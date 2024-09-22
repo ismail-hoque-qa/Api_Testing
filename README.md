@@ -63,29 +63,78 @@ This project demonstrates API testing using Postman, providing a collection of t
 ## _**1. Create Student **_
 
 ### Request URL: https://thetestingworldapi.com/api/studentsDetails
+### Pre-request Script:
+```console
+var firstName = pm.variables.replaceIn('{{$randomFirstName}}')
+pm.environment.set("firstName",firstName)
+
+var middleName = pm.variables.replaceIn('{{$randomFirstName}}')
+pm.environment.set("middleName",middleName)
+
+var lastName = pm.variables.replaceIn('{{$randomLastName}}')
+pm.environment.set("lastName",lastName)
+
+var moment = require ("moment")
+const today = moment()
+pm.environment.set("date",today.format("YYYY-MM-DD"))
+console.log(today)
+```
   **Request Body:** 
  ```console 
  { 
-"first_name": "sample string 2", 
-"middle_name": "sample string 3", 
-"last_name": "sample string 4", 
-"date_of_birth": "sample string 5" 
+"first_name": "{{firstName}}", 
+"middle_name": "{{middleName}}", 
+"last_name": "{{lastName}}", 
+"date_of_birth": "{{date}}" 
 }
+
 ```
   **Response Body:**
  ```console 
-   { 
-"id": 526718, 
-"first_name": "sample string 2", 
-"middle_name": "sample string 3", 
-"last_name": "sample string 4", 
-"date_of_birth": "sample string 5" 
+  {
+    "id": 10391553,
+    "first_name": "Edwina",
+    "middle_name": "Robyn",
+    "last_name": "Steuber",
+    "date_of_birth": "2024-09-22"
 } 
 
 ```
  ## _**2. Get Specific student Details By ID**_
 ### Request URL: https://thetestingworldapi.com/api/studentsDetails/id 
 ### Request Method: GET
+### Post-request Script:
+````console
+var data = pm.response.json()
+pm.environment.set("id",data.data.id)
+
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("id Validation",function(){
+    pm.expect(pm.environment.get("id")).to.equal(data.data.id)
+})
+
+pm.test("FirstName Validation",function(){
+    pm.expect(pm.environment.get("firstName")).to.equal(data.data.first_name)
+})
+
+pm.test("MiddleName Validation",function(){
+    pm.expect(pm.environment.get("middleName")).to.equal(data.data.middle_name)
+})
+
+pm.test("LastName Validation",function(){
+    pm.expect(pm.environment.get("lastName")).to.equal(data.data.last_name)
+})
+
+pm.test("Date of Birth Validation",function(){
+    pm.expect(pm.environment.get("date")).to.equal(data.data.date_of_birth)
+})
+
+
+
+````
 ### Response Body:
  ```console  
 "status": "true", 
@@ -101,7 +150,21 @@ This project demonstrates API testing using Postman, providing a collection of t
 ## _**3. Get Student **_
 ### Request URL: https://thetestingworldapi.com/api/studentsDetails 
 ### Request Method: GET
-### Pre-request Script: None
+### Post-request Script:
+  ```console
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+var data = pm.response.json()
+for(i=0; i<data.length; i++){
+    console.log(data[i].first_name)
+}
+console.log(data[0].last_name)
+
+
+
+  ```
 ### Request Body:None
   **Response Body:**
  ```console 
